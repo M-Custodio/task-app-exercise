@@ -27,18 +27,22 @@
                 <tr>
                   <td>{{ $task->name }}</td>
                   <td>{{ $task->description }}</td>
-                  <td class="text-center">{{ $task->status }}</td>
-                  <td class="flex justify-center space-x-7">
-                    <a href="{{ route('tasks.edit', $task->id) }}"
-                      class="bg-primary hover:bg-accent text-white font-semibold py-2 px-4 rounded shadow">
-                      Edit
+                  <td class="text-center">
+                    @if ($task->status === 'in-progress')
+                      <i class='bx bxs-circle text-orange-400 text-xl' title="In Progress"></i>
+                    @else
+                      <i class='bx bxs-circle text-green-700 text-xl' title="Completed"></i>
+                    @endif
+                  </td>
+                  <td class="flex justify-center items-center space-x-7">
+                    <a href="{{ route('tasks.edit', $task->id) }}">
+                      <i class='bx bx-edit-alt text-xl'></i>
                     </a>
                     <form action="{{ route('tasks.destroy', $task->id) }}" method="post">
                       @csrf
                       @method('DELETE')
-                      <button type="submit"
-                        class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow">
-                        Delete
+                      <button type="submit">
+                        <i class='bx bx-trash text-xl'></i>
                       </button>
                     </form>
                   </td>
