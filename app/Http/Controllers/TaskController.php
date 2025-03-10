@@ -40,10 +40,43 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        return view();
+        //check if the task belongs to the authenticated user
+        if ($task->user_id !== auth()->id()) {
+            abort(403);
+        }
+        return view('tasks.edit', compact('task'));
     }
 
-    public function update(Request $request, Task $task) {}
+    public function update(Request $request, Task $task)
+    {
+        //check if the task belongs to the authenticated user
+        if ($task->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-    public function destroy(Task $task) {}
+        $request->validate([
+            'name' => 'required|min:3',
+            'status' => 'required|in:in-progress,completed',
+        ]);
+
+        $task->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('tasks');
+    }
+
+    public function destroy(Task $task)
+    {
+        //check if the task belongs to the authenticated user
+        if ($task->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $task->delete();
+
+        return redirect()->route('tasks');
+    }
 }
