@@ -42,6 +42,17 @@
               </select>
             </div>
             <div class="mb-4">
+              <label for="due_date" class="block text-gray-700 text-sm font-bold mb-2">Due Date</label>
+              <input type="date" name="due_date" id="due_date"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value="{{ old('due_date') ?? $task->due_date }}">
+              <div class="mt-2">
+                <input type="checkbox" id="no_due_date" name="no_due_date" value="1"
+                  {{ $task->no_due_date ? 'checked' : '' }}>
+                <label for="no_due_date" class="text-gray-700 text-sm">No due date</label>
+              </div>
+            </div>
+            <div class="mb-4">
               <button type="submit"
                 class="bg-primary hover:bg-accent text-white font-semibold py-2 px-4 rounded shadow">Save</button>
             </div>

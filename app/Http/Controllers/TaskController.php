@@ -23,6 +23,7 @@ class TaskController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
+            'due_date' => 'date',
         ]);
 
         //add status to $request
@@ -33,6 +34,7 @@ class TaskController extends Controller
             'description' => $request->description,
             'status' => $request->status,
             'user_id' => auth()->id(),
+            'due_date' => $request->due_date,
         ]);
 
         return redirect()->route('tasks');
@@ -57,12 +59,14 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'required|min:3',
             'status' => 'required|in:in-progress,completed',
+            'due_date' => 'date',
         ]);
 
         $task->update([
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
+            'due_date' => $request->due_date,
         ]);
 
         return redirect()->route('tasks');

@@ -24,6 +24,7 @@ class TaskFactory extends Factory
             'status' => $this->faker->randomElement(['in-progress', 'completed']),
             // Change later to user_id 1
             'user_id' => 2,
+            'due_date' => $this->faker->dateTimeBetween('+1 week', '+2 weeks')->format('Y-m-d'),
         ];
     }
 }
