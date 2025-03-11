@@ -11,6 +11,17 @@
 
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div class="flex justify-end mb-4">
+        <form action="{{ route('tasks') }}" method="get">
+          <select name="status" id="status" class="bg-transparent border-transparent text-right">
+            <option value="">All</option>
+            <option value="in-progress" {{ request('status') === 'in-progress' ? 'selected' : '' }}>In Progress</option>
+            <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+          </select>
+          <button type="submit"
+            class="bg-primary hover:bg-accent text-white font-semibold py-2 px-4 rounded shadow ml-2">Filter</button>
+        </form>
+      </div>
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
           <table class="table-auto w-full ">
@@ -18,6 +29,7 @@
               <tr>
                 <th>Title/Name</th>
                 <th>Description</th>
+                <th>Due</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -27,6 +39,7 @@
                 <tr>
                   <td>{{ $task->name }}</td>
                   <td>{{ $task->description }}</td>
+                  <td>{{ $task->due_date }}</td>
                   <td class="text-center">
                     @if ($task->status === 'in-progress')
                       <i class='bx bxs-circle text-orange-400 text-xl' title="In Progress"></i>
@@ -50,6 +63,9 @@
               @endforeach
             </tbody>
           </table>
+          <div class="mt-4">
+            {{ $tasks->links('vendor.pagination.tailwind') }}
+          </div>
         </div>
       </div>
     </div>

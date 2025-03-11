@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::where('user_id', auth()->id())->get();
+        $query = Task::where('user_id', auth()->id());
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        // Modify the sorting to put null due_date's at the end
+        $tasks = $query->orderByRaw('due_date IS NULL, due_date')->paginate(10);
 
         return view('tasks', compact('tasks'));
     }
