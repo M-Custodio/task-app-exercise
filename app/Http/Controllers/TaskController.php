@@ -103,4 +103,18 @@ class TaskController extends Controller
 
         return redirect()->route('tasks');
     }
+
+    public function toggleStatus(Task $task)
+    {
+        // Check if the task belongs to the authenticated user
+        if ($task->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Toggle the status
+        $task->status = $task->status === 'in-progress' ? 'completed' : 'in-progress';
+        $task->save();
+
+        return response()->json(['status' => $task->status]);
+    }
 }

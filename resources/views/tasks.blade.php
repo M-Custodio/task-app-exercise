@@ -39,13 +39,11 @@
                 <tr>
                   <td>{{ $task->name }}</td>
                   <td>{{ $task->description }}</td>
-                  <td>{{ $task->due_date }}</td>
+                  <td class="text-center">{{ \Carbon\Carbon::parse($task->due_date)->format('jS M') }}</td>
                   <td class="text-center">
-                    @if ($task->status === 'in-progress')
-                      <i class='bx bxs-circle text-orange-400 text-xl' title="In Progress"></i>
-                    @else
-                      <i class='bx bxs-circle text-green-700 text-xl' title="Completed"></i>
-                    @endif
+                    <i class='bx bxs-circle text-xl cursor-pointer {{ $task->status === 'in-progress' ? 'text-orange-400' : 'text-green-700' }}'
+                      title="{{ $task->status === 'in-progress' ? 'In Progress' : 'Completed' }}"
+                      onclick="toggleStatus({{ $task->id }}, this)"></i>
                   </td>
                   <td class="flex justify-center items-center space-x-7">
                     <a href="{{ route('tasks.edit', $task->id) }}">
@@ -70,4 +68,29 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function toggleStatus(taskId, element) {
+      fetch(`/tasks/${taskId}/toggle-status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'in-progress') {
+            element.classList.remove('text-green-700');
+            element.classList.add('text-orange-400');
+            element.setAttribute('title', 'In Progress');
+          } else {
+            element.classList.remove('text-orange-400');
+            element.classList.add('text-green-700');
+            element.setAttribute('title', 'Completed');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
 </x-app-layout>
