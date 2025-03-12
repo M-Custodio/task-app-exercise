@@ -46,6 +46,11 @@
                   value="{{ old('due_date') ?? $task->due_date }}">
               </div>
               <div class="mb-4">
+                <input type="checkbox" id="no_due_date" name="no_due_date" value="1"
+                  {{ old('no_due_date') ? 'checked' : '' }}>
+                <label for="no_due_date" class="text-gray-700 text-sm">No due date</label>
+              </div>
+              <div class="mb-4">
                 <label for="user_ids" class="block text-gray-700 text-sm font-bold mb-2">Assign Users</label>
                 <div class="flex flex-wrap">
                   @foreach ($users as $user)
