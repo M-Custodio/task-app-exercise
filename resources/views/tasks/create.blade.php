@@ -36,10 +36,27 @@
               <input type="date" name="due_date" id="due_date"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value="{{ old('due_date') }}">
-              <div class="mt-2">
-                <input type="checkbox" id="no_due_date" name="no_due_date" value="1"
-                  {{ old('no_due_date') ? 'checked' : '' }}>
-                <label for="no_due_date" class="text-gray-700 text-sm">No due date</label>
+            </div>
+            <div class="mb-4">
+              <input type="checkbox" id="no_due_date" name="no_due_date" value="1"
+                {{ old('no_due_date') ? 'checked' : '' }}>
+              <label for="no_due_date" class="text-gray-700 text-sm">No due date</label>
+            </div>
+            <div class="mb-4">
+              <label for="user_ids" class="block text-gray-700 text-sm font-bold mb-2">Assign Users</label>
+              <div class="flex flex-wrap">
+                @foreach ($users as $user)
+                  @if ($user->id === auth()->id())
+                    @continue
+                  @endif
+                  {{-- Assuming that the database of users is small by using checboxes to simplify the user selection. On bigger user bases there'd be a "team of users" and if the userbase is too big, a different approach like a search --}}
+                  <div class="mr-4 mb-2">
+                    <label class="inline-flex items-center">
+                      <input type="checkbox" name="user_ids[]" value="{{ $user->id }}" class="form-checkbox">
+                      <span class="ml-2">{{ ucfirst($user->name) }}</span>
+                    </label>
+                  </div>
+                @endforeach
               </div>
             </div>
             <div class="mb-4">
