@@ -36,9 +36,8 @@ php artisan migrate
 ```
 
 **Create a user and use task seeder**
-
+(Task seeder uses user_id 1)
 ```bash
-Register a user (Task seeder uses user_id 1)
 php artisan db:seed --class=TaskSeeder
 ```
 
