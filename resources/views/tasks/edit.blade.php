@@ -21,17 +21,8 @@
                   </ul>
                 </div>
               @endif
-              <div class="mb-4">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Title/Name</label>
-                <input type="text" name="name" id="name"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value="{{ old('name') ?? $task->name }}">
-              </div>
-              <div class="mb-4">
-                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
-                <textarea name="description" id="description"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('description') ?? $task->description }}</textarea>
-              </div>
+              <x-input-text name="name" :value="old('name', $task->name)">Title/Name</x-input-text>
+              <x-input-textarea name="description" :value="old('description', $task->description)">Description</x-input-textarea>
               <div class="mb-4">
                 <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status</label>
                 <select name="status" id="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -67,8 +58,7 @@
                 </div>
               </div>
               <div class="mb-4">
-                <button type="submit"
-                  class="bg-primary hover:bg-accent text-white font-semibold py-2 px-4 rounded shadow">Save</button>
+                <x-primary-button>Update Task</x-primary-button>
               </div>
             </form>
           </div>
