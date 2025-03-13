@@ -16,22 +16,40 @@ The application allows users to create, manage, and assign tasks within a team e
 ## Installation & Setup
 
 **Clone the repository:**
-```git clone
-```cd task-app-exercise
+
+```bash
+git clone
+cd task-app-exercise
+```
 
 **Install dependencies**
-```composer install
-```npm install
+
+```bash
+composer install
+npm install
+```
 
 **Run migrations**
-```php artisan migrate
+
+```bash
+php artisan migrate
+```
 
 **Create a user and use task seeder**
-```Register a user (Task seeder uses user_id 1)
-```php artisan db:seed --class=TaskSeeder
+
+```bash
+Register a user (Task seeder uses user_id 1)
+php artisan db:seed --class=TaskSeeder
+```
 
 **Compile assets**
-```npm run build
+
+```bash
+npm run build
+```
 
 **Start the server**
-```php artisan serve
+
+```bash
+php artisan serve
+```
