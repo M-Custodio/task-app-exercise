@@ -10,14 +10,23 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::where('user_id', auth()->id());
+        $user = auth()->user();
+        $status = $request->input('status');
 
-        if ($request->has('status') && $request->status != '') {
-            $query->where('status', $request->status);
-        }
+        $tasks = Task::where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->orWhereHas('users', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+        })
+            ->when($status, function ($query, $status) {
+                return $query->where('status', $status);
+            })
+            ->orderByRaw('ISNULL(due_date), due_date ASC')
+            ->paginate(10);
 
-        // Modify the sorting to put null due_date's at the end
-        $tasks = $query->orderByRaw('due_date IS NULL, due_date')->paginate(10);
+        // Append query parameters to pagination links
+        $tasks->appends($request->query());
 
         return view('tasks', compact('tasks'));
     }
@@ -55,8 +64,10 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        //check if the task belongs to the authenticated user
-        if ($task->user_id !== auth()->id()) {
+        $user = auth()->user();
+
+        // Check if the task belongs to the authenticated user or is assigned to the authenticated user
+        if ($task->user_id !== $user->id && !$task->users->contains($user->id)) {
             abort(403);
         }
 
@@ -67,8 +78,10 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        //check if the task belongs to the authenticated user
-        if ($task->user_id !== auth()->id()) {
+        $user = auth()->user();
+
+        // Check if the task belongs to the authenticated user or is assigned to the authenticated user
+        if ($task->user_id !== $user->id && !$task->users->contains($user->id)) {
             abort(403);
         }
 
@@ -94,8 +107,10 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
-        //check if the task belongs to the authenticated user
-        if ($task->user_id !== auth()->id()) {
+        $user = auth()->user();
+
+        // Check if the task belongs to the authenticated user or is assigned to the authenticated user
+        if ($task->user_id !== $user->id && !$task->users->contains($user->id)) {
             abort(403);
         }
 
@@ -106,8 +121,10 @@ class TaskController extends Controller
 
     public function toggleStatus(Task $task)
     {
-        // Check if the task belongs to the authenticated user
-        if ($task->user_id !== auth()->id()) {
+        $user = auth()->user();
+
+        // Check if the task belongs to the authenticated user or is assigned to the authenticated user
+        if ($task->user_id !== $user->id && !$task->users->contains($user->id)) {
             abort(403);
         }
 
